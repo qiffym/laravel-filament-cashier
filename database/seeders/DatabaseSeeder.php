@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Customer;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\StockAdjustment;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -23,5 +24,6 @@ class DatabaseSeeder extends Seeder
         Customer::factory(50)->create();
         Product::factory(50)->create();
         StockAdjustment::factory(50)->create();
+        Order::factory(50)->create();
     }
 }
