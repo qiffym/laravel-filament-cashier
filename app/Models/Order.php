@@ -37,6 +37,11 @@ class Order extends Model
         });
     }
 
+    public function getRouteKeyName(): string
+    {
+        return 'order_number';
+    }
+
     public function orderDetails(): HasMany
     {
         return $this->hasMany(OrderDetail::class);

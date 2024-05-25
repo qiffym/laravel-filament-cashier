@@ -20,5 +20,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         \Illuminate\Database\Eloquent\Model::unguard();
+        \Carbon\Carbon::setLocale('id');
     }
 }
