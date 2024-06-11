@@ -37,6 +37,12 @@ class Order extends Model
         });
     }
 
+    public function markAsComplete(): void
+    {
+        $this->status = \App\Enums\OrderStatus::COMPLETED;
+        $this->save();
+    }
+
     public function getRouteKeyName(): string
     {
         return 'order_number';
