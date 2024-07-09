@@ -7,6 +7,8 @@ use App\Models\Order;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -105,6 +107,8 @@ class OrderResource extends Resource
                         }, 'receipt-' . $record->order_number . '.pdf');
                     }),
                 Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make()
+                        ->color('gray'),
                     Tables\Actions\EditAction::make()
                         ->color('gray'),
                     Tables\Actions\Action::make('edit-transaction')
@@ -134,13 +138,21 @@ class OrderResource extends Resource
                             $records->each(fn (Order $order) => $order->orderDetails()->delete());
                         }),
                 ]),
+            ])
+            ->headerActions([
+                Tables\Actions\ExportAction::make()
+                    ->label('Export Excel')
+                    ->fileDisk('public')
+                    ->color('success')
+                    ->icon('heroicon-o-document-text')
+                    ->exporter(\App\Filament\Exports\OrderExporter::class),
             ]);
     }
 
     public static function getRelations(): array
     {
         return [
-            //
+            \App\Filament\Resources\OrderResource\RelationManagers\OrderDetailsRelationManager::class,
         ];
     }
 
@@ -150,6 +162,7 @@ class OrderResource extends Resource
             'index' => Pages\ListOrders::route('/'),
             'create' => Pages\CreateOrder::route('/create'),
             'edit' => Pages\EditOrder::route('/{record}/edit'),
+            'view' => Pages\ViewOrder::route('/{record}/details'),
             'create-transaction' => Pages\CreateTransaction::route('{record}'),
         ];
     }
@@ -202,5 +215,18 @@ class OrderResource extends Resource
                 ->formatStateUsing(fn ($state) => $state->format('d M Y H:i'))
                 ->toggleable(isToggledHiddenByDefault: true),
         ];
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist->schema([
+            TextEntry::make('order_number')->color('gray'),
+            TextEntry::make('customer.name')->placeholder('-'),
+            TextEntry::make('discount')->money('IDR')->color('gray'),
+            TextEntry::make('total')->money('IDR')->color('gray'),
+            TextEntry::make('payment_method')->badge()->color('gray'),
+            TextEntry::make('status')->badge()->color(fn ($state) => $state->getColor()),
+            TextEntry::make('created_at')->dateTime()->formatStateUsing(fn ($state) => $state->format('d M Y H:i'))->color('gray'),
+        ]);
     }
 }
