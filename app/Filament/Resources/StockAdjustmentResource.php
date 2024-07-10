@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\StockAdjustmentResource\Pages;
-use App\Filament\Resources\StockAdjustmentResource\RelationManagers;
+use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\StockAdjustment;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -27,14 +27,15 @@ class StockAdjustmentResource extends Resource
                     ->relationship('product', 'name')
                     ->searchable()
                     ->preload()
-                    ->required(),
+                    ->required()
+                    ->hiddenOn(RelationManagers\StockAdjustmentsRelationManager::class),
                 Forms\Components\TextInput::make('quantity_adjusted')
                     ->required()
                     ->numeric(),
                 Forms\Components\Textarea::make('reason')
                     ->required()
-                    ->default('Restock.')
                     ->maxLength(65535)
+                    ->default('Restock.')
                     ->placeholder('Write a reason for the stock adjustment')
                     ->columnSpanFull(),
             ]);
@@ -46,8 +47,8 @@ class StockAdjustmentResource extends Resource
             ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('product.name')
-                    ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->hiddenOn(RelationManagers\StockAdjustmentsRelationManager::class),
                 Tables\Columns\TextColumn::make('quantity_adjusted')
                     ->label('Adjusted')
                     ->numeric()
@@ -70,7 +71,8 @@ class StockAdjustmentResource extends Resource
                 Tables\Filters\SelectFilter::make('product_id')
                     ->relationship('product', 'name')
                     ->searchable()
-                    ->preload(),
+                    ->preload()
+                    ->hiddenOn(RelationManagers\StockAdjustmentsRelationManager::class),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
