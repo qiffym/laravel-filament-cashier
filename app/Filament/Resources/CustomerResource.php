@@ -15,9 +15,11 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CustomerResource extends Resource
 {
-    protected static ?string $model = Customer::class;
+    use \App\Traits\HasNavigationBadge;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $model = Customer::class;
+    protected static ?string $navigationGroup = 'Transactions';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     public static function form(Form $form): Form
     {
