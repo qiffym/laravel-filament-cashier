@@ -85,6 +85,7 @@ class ProductResource extends Resource
                 Tables\Columns\TextColumn::make('category.name'),
                 Tables\Columns\TextColumn::make('sku')
                     ->label('SKU')
+                    ->limit(50)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('stock_quantity')
                     ->label('Qty')
