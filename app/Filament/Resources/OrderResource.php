@@ -167,6 +167,13 @@ class OrderResource extends Resource
         ];
     }
 
+    public static function getWidgets(): array
+    {
+        return [
+            OrderResource\Widgets\OrderStats::class,
+        ];
+    }
+
     public static function getTableColumns(): array
     {
         return [
